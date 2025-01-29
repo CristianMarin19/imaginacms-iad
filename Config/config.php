@@ -127,36 +127,6 @@ return [
 |--------------------------------------------------------------------------
 */
   'filters' => [
-    'range-prices' => [
-      'title' => 'Rango de Precios',
-      'name' => 'range-prices',
-      'status' => true,
-      'isExpanded' => true,
-      'type' => 'range',
-      'repository' => 'Modules\Iad\Repositories\AdRepository',
-      'emitTo' => 'filtersGetData', //Emit data selected (Parent Component to this case)
-      'repoAction' => 'filter', //Action in repo ('filter' in Ad Repository)
-      'repoAttribute' => 'priceRange',
-      'listener' => null, // Listen to another component
-      'repoMethod' => null,
-      'layout' => 'range-layout-2', // Two inputs (Min and Max)
-      'classes' => 'col-xs-12 col-md-6', // Main Class Filter (Columns and others classes)
-    ],
-    'range-ages' => [
-      'title' => 'Rango de Edades',
-      'name' => 'range-ages',
-      'status' => true,
-      'isExpanded' => true,
-      'type' => 'range',
-      'repository' => 'Modules\Iad\Repositories\AdRepository',
-      'emitTo' => 'filtersGetData', //Emit data selected (Parent Component to this case)
-      'repoAction' => 'filter',
-      'repoAttribute' => 'ageRange',
-      'listener' => null, // Listen to another component
-      'repoMethod' => null,
-      'layout' => 'range-layout-2', // Two inputs (Min and Max)
-      'classes' => 'col-xs-12 col-md-6', // Main Class Filter (Columns and others classes)
-    ],
     'ads-categories' => [
       'title' => 'Categorias',
       'name' => 'ads-categories',
