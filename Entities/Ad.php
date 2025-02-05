@@ -18,13 +18,14 @@ use Modules\Iad\Entities\AdStatus;
 use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\RevisionableTrait;
 use Modules\Requestable\Entities\Requestable;
+use Modules\Notification\Traits\IsNotificable;
 
 use Modules\Core\Support\Traits\AuditTrait;
 use Modules\Iqreable\Traits\IsQreable;
 
 class Ad extends CrudModel
 {
-  use Translatable, MediaRelation, IsQreable, isBuildable;
+  use Translatable, MediaRelation, IsQreable, isBuildable, IsNotificable;
 
   public $transformer = 'Modules\Iad\Transformers\AdTransformer';
 
@@ -190,9 +191,37 @@ class Ad extends CrudModel
     if (is_module_enabled('Iplan') && $authUser) {
       $service = app('Modules\Iplan\Services\SubscriptionService');
       $hasSubscription = $service->validate($this, $authUser);
-      if($hasSubscription) return true;
+      if ($hasSubscription) return true;
     }
     return false;
   }
 
+  public function isNotificableParams($event)
+  {
+    //Notify only the created ad
+    if ($event != 'created') return null;
+    //get Users to notify
+    $settingValue = json_decode(setting('iad::usersToNotify') ?? []);
+    $userRepository = app('Modules\Iprofile\Repositories\UserApiRepository');
+    $users = $userRepository->getItemsBy(json_decode(json_encode([
+      'filter' => ['id' => $settingValue]
+    ])));
+    if (!$users->count()) return null;
+
+    //User
+    $userId = \Auth::id() ?? null;
+    $source = "iad";
+
+    //Notify to ad's user of a new bid
+    return [
+      'created' => [
+        "title" => trans("iad::ads.newAdTitleEmail"),
+        "message" => trans("iad::ads.newAdMessageEmail", ['title' => $this->title]),
+        "email" => $users->pluck('email')->toArray(),
+        "broadcast" => $users->pluck('id')->toArray(),
+        "userId" => $userId,
+        "source" => $source
+      ],
+    ];
+  }
 }
