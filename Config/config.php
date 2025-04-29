@@ -326,5 +326,14 @@ if you use the statuses and defined some one by default that's would be the stat
         'types' => []
       ]
     ]
+  ],
+  //Tenant
+  'tenant' => [
+    'dbPrefix' => 'iad',
+    'client' => [
+      'icon' => 'fal fa-newspaper',
+      'title' => '(pt) Anounces',
+      'description' => '(pt) Anounces Description',
+    ]
   ]
 ];
